@@ -1,21 +1,23 @@
 import React from "react";
 import "./FormStyling.css";
 class CountdownForm extends React.Component {
-	onSubmit(e) {
+	onSubmit = (e, timeAdded) => {
 		//This will give you string for seconds. Do not remove refs
 		e.preventDefault();
-		var secondsStr = this.refs.seconds.value;
-		const timeAdded = parseInt(secondsStr);
-		if (secondsStr !== "" && timeAdded > 0)
-			this.props.onSetCountdownTime(timeAdded);
-	}
+		this.props.onSetCountdownTime(timeAdded);
+	};
 
 	render() {
 		return (
 			<div>
 				<form
 					ref="form"
-					onSubmit={this.onSubmit.bind(this)}
+					onSubmit={e => {
+						var secondsStr = this.refs.seconds.value.trim();
+						const timeAdded = parseInt(secondsStr);
+						if (timeAdded >= 0) this.onSubmit(e, timeAdded);
+						else e.preventDefault();
+					}}
 					className="countdown-form form-body">
 					<input
 						type="text"

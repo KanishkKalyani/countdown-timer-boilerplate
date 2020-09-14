@@ -10,21 +10,13 @@ class Countdown extends React.Component {
 		};
 	}
 
-	resetCount = () => {
-		this.setState({ count: 0 });
-	};
-
 	render() {
 		const { count } = this.state;
 		return (
 			<div style={{ position: "relative" }}>
-				{count !== 0 && (
-					<Clock timeInSeconds={count} resetCount={this.resetCount} />
-				)}
+				<Clock timeInSeconds={count} />
 				<CountdownForm
-					onSetCountdownTime={val =>
-						this.state.count === 0 && this.setState({ count: val })
-					}
+					onSetCountdownTime={val => this.setState({ count: val })}
 				/>
 			</div>
 		);

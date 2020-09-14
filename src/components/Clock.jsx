@@ -4,7 +4,6 @@ class Clock extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			displayTime: "",
 			timeInSec: 0,
 		};
 	}
@@ -28,28 +27,30 @@ class Clock extends React.Component {
 		this.clock = setInterval(() => {
 			this.setState({
 				timeInSec: this.state.timeInSec - 1,
-				displayTime: this.formatTime(this.state.timeInSec - 1),
 			});
 		}, 1000);
 
 		setTimeout(() => {
 			clearInterval(this.clock);
-			this.props.resetCount();
-		}, (timeInSeconds + 1) * 1000);
+		}, timeInSeconds * 1000);
 	};
 
-	componentDidMount() {
-		this.setState({ timeInSec: this.props.timeInSeconds + 1 });
-		if (this.props.timeInSeconds > 0) this.startTimer();
+	componentDidUpdate(prevProps) {
+		if (
+			this.props.timeInSeconds !== prevProps.timeInSeconds &&
+			this.state.timeInSec === 0
+		) {
+			this.setState({ timeInSec: this.props.timeInSeconds });
+			this.startTimer();
+		}
 	}
 
 	render() {
-		const { displayTime, timeInSec } = this.state;
-		//Keep the classes name. Try to inject your code and do not remove existing code
+		const { timeInSec } = this.state;
 		return (
 			<div className="clock clock-container">
 				<span className="clock-text clock-value">
-					{timeInSec !== 0 && displayTime}
+					{this.formatTime(timeInSec)}
 				</span>
 			</div>
 		);
